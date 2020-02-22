@@ -3,7 +3,7 @@
 
 static const int SPRITE_DMA_CHANNEL = 3;
 
-struct SpriteInfo = {
+struct SpriteInfo {
     int oamId;
     int width;
     int height;

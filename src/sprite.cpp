@@ -1,6 +1,6 @@
 #include <nds.h>
 #include <nds/arm9/trig_lut.h>
-#include "sprite.h"
+#include "includes/sprite.h"
 
 void initOAM(OAMTable* oam)
 {
