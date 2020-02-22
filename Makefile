@@ -14,16 +14,18 @@ include $(DEVKITARM)/ds_rules
 # SOURCES is a list of directories containing source code
 # INCLUDES is a list of directories containing extra header files
 # GRAPHICS is a list of directories containing files to be processed by grit
-#
-# All directories are specified relative to the project directory where
-# the makefile is found.
-#
 #---------------------------------------------------------------------------------
-TARGET			:=	union-demo
-BUILD			:=	out/build
-SOURCES			:=	src
-INCLUDES		:=	src/include
-GRAPHICS		:=	res/sprite
+TARGET		:=	union-demo
+BUILD		:=	out
+SOURCES		:=	src
+INCLUDES	:=	src/include
+GRAPHICS	:=	res/sprite
+
+#---------------------------------------------------------------------------------
+# display options for output files
+#---------------------------------------------------------------------------------
+GAME_TITLE	:=	Union-nds Demo
+GAME_ICON	:=	$(CURDIR)/../icon.bmp
 
 #---------------------------------------------------------------------------------
 # options for code generation
@@ -36,15 +38,10 @@ CFLAGS	:=	-g -Wall -O2\
 		$(ARCH)
 
 CFLAGS		+=	$(INCLUDE) -DARM9
-CXXFLAGS	:= $(CFLAGS) -fno-rtti -fno-exceptions
+CXXFLAGS	:=	$(CFLAGS) -fno-rtti -fno-exceptions
 
-ASFLAGS	:=	-g $(ARCH)
-LDFLAGS	=	-specs=ds_arm9.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)
-
-GAME_TITLE		:= Union-nds Demo
-GAME_SUBTITLE1	:= No, really!
-GAME_SUBTITLE2	:= I'm serious!!!
-GAME_ICON		:= $(CURDIR)/../icon.bmp
+ASFLAGS		:=	-g $(ARCH)
+LDFLAGS		=	-specs=ds_arm9.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)
 
 #---------------------------------------------------------------------------------
 # any extra libraries we wish to link with the project
@@ -67,16 +64,15 @@ ifneq ($(BUILD),$(notdir $(CURDIR)))
 export OUTPUT	:=	$(CURDIR)/$(TARGET)
 
 export VPATH	:=	$(foreach dir,$(SOURCES),$(CURDIR)/$(dir)) \
-					$(foreach dir,$(DATA),$(CURDIR)/$(dir)) \
-					$(foreach dir,$(GRAPHICS),$(CURDIR)/$(dir)) \
-					$(foreach dir,$(AUDIO),$(CURDIR)/$(dir))
+			$(foreach dir,$(DATA),$(CURDIR)/$(dir)) \
+			$(foreach dir,$(GRAPHICS),$(CURDIR)/$(dir)) \
+			$(foreach dir,$(AUDIO),$(CURDIR)/$(dir))
 
 export DEPSDIR	:=	$(CURDIR)/$(BUILD)
 
 CFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.c)))
 CPPFILES	:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.cpp)))
 SFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.s)))
-BINFILES	:=	$(foreach dir,$(DATA),$(notdir $(wildcard $(dir)/*))) $(SOUNDBANK_NAME).bin
 PNGFILES	:=	$(foreach dir,$(GRAPHICS),$(notdir $(wildcard $(dir)/*.png)))
 
 #---------------------------------------------------------------------------------
@@ -94,17 +90,17 @@ endif
 #---------------------------------------------------------------------------------
 
 export OFILES		:=	$(addsuffix .o,$(BINFILES)) \
-						$(PNGFILES:.png=.o) \
-						$(CPPFILES:.cpp=.o) \
-						$(CFILES:.c=.o) \
-						$(SFILES:.s=.o) \
+				$(PNGFILES:.png=.o) \
+				$(CPPFILES:.cpp=.o) \
+				$(CFILES:.c=.o) \
+				$(SFILES:.s=.o) \
 
 export AUDIOFILES	:=	$(foreach dir,$(AUDIO),$(notdir $(wildcard $(dir)/*)))
 
 export INCLUDE		:=	$(foreach dir,$(INCLUDES),-I$(CURDIR)/$(dir)) \
-						$(foreach dir,$(LIBDIRS),-I$(dir)/include) \
-						$(foreach dir,$(LIBDIRS),-I$(dir)/include) \
-						-I$(CURDIR)/$(BUILD)
+				$(foreach dir,$(LIBDIRS),-I$(dir)/include) \
+				$(foreach dir,$(LIBDIRS),-I$(dir)/include) \
+				-I$(CURDIR)/$(BUILD)
 
 export LIBPATHS		:=	$(foreach dir,$(LIBDIRS),-L$(dir)/lib)
 
@@ -128,7 +124,7 @@ else
 #---------------------------------------------------------------------------------
 # main targets
 #---------------------------------------------------------------------------------
-$(OUTPUT).nds	: 	$(OUTPUT).arm9
+$(OUTPUT).nds	:	$(OUTPUT).arm9
 $(OUTPUT).arm9	:	$(OUTPUT).elf
 $(OUTPUT).elf	:	$(OFILES)
 
@@ -156,18 +152,8 @@ $(OUTPUT).elf	:	$(OFILES)
 	grit $< -fts -o$*
 
 #---------------------------------------------------------------------------------
-# This rule creates the soundbank file for your project using mmutil.
-# mmutil takes all audio files in the audio folder and puts them into a
-# soundbank file.
-#---------------------------------------------------------------------------------
-$(SOUNDBANK_NAME).bin : $(AUDIOFILES)
-#---------------------------------------------------------------------------------
-	@echo $(notdir $^)
-	@mmutil -d $^ -o$(SOUNDBANK_NAME).bin -h$(SOUNDBANK_NAME).h
-
-
 -include $(DEPSDIR)/*.d
 
-#---------------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------
 endif
-#---------------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------
