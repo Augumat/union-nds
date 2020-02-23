@@ -10,7 +10,7 @@ struct SpriteInfo {
     SpriteEntry* entry;
 };
 
-/* Handle OAM calls. */
+/* OAM utility methods. */
 void initOAM(OAMTable* oam);
 void updateOAM(OAMTable* oam);
 

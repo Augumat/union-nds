@@ -1,11 +1,11 @@
 #include <nds.h>
 #include "includes/sprite.h"
-// sprites
+// grit imports (resources)
 #include "top.h"
 #include "bottom.h"
 
 // set a constant for background copying
-static const int DMA_CHANNEL = 3;
+static const int BG_DMA_CHANNEL = 3;
 
 void initVideo()
 {
@@ -29,7 +29,7 @@ void initVideo()
 
 void initBackgrounds()
 {
-    // set the main screen background to 16-bit color
+    // set the main screen background to 16-bit color at low priority
     REG_BG3CNT = BG_BMP16_256x256 | BG_BMP_BASE(0) | BG_PRIORITY(3);
     // set the main screen affine to the identity matrix
     REG_BG3PA = 1 << 8;
@@ -40,7 +40,7 @@ void initBackgrounds()
     REG_BG3X = 0;
     REG_BG3Y = 0;
 
-    // set the sub screen background to 16-bit color
+    // set the sub screen background to 16-bit color at low priority
     REG_BG3CNT_SUB = BG_BMP16_256x256 | BG_BMP_BASE(0) | BG_PRIORITY(3);
     // set the sub screen affine to the identity matrix
     REG_BG3PA_SUB = 1 << 8;
@@ -52,19 +52,18 @@ void initBackgrounds()
     REG_BG3Y_SUB = 0;
 }
 
-void displayTop()
+void displayBackgrounds()
 {
+    // display top screen
     dmaCopyHalfWords(
-        DMA_CHANNEL,
+        BG_DMA_CHANNEL,
         topBitmap,
         (uint16*)BG_BMP_RAM_SUB(0),
         topBitmapLen
     );
-}
-void displayBottom()
-{
+    // display bottom screen
     dmaCopyHalfWords(
-        DMA_CHANNEL,
+        BG_DMA_CHANNEL,
         bottomBitmap,
         (uint16*)BG_BMP_RAM(0),
         bottomBitmapLen
@@ -85,15 +84,14 @@ int main()
     initOAM(oam);
     // TODO init other sprites (the ones that will move in the demo)
 
-    // display backgrounds
-    displayTop();
-    displayBottom();
+    // display static sprites
+    displayBackgrounds();
 
     // TODO initialize input handling
 
-    // enter the game loop
+    // enter the program loop
     while (true) {
-        // TODO manage input handling and updating sprites
+        // TODO handle input and update state
         swiWaitForVBlank();
         updateOAM(oam);
     }

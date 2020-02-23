@@ -23,7 +23,9 @@ void initOAM(OAMTable* oam)
 
 void updateOAM(OAMTable* oam)
 {
+    // flush the cache back to main memory so DMA sees the right data
     DC_FlushAll();
+    // display all loaded sprites
     dmaCopyHalfWords(
         SPRITE_DMA_CHANNEL,
         oam->oamBuffer,
@@ -35,14 +37,18 @@ void updateOAM(OAMTable* oam)
 void setSpriteVisibility(SpriteEntry* entry, bool hidden, bool affine, bool doubleBound)
 {
     if (hidden) {
-        entry->isRotateScale = false; // disable rotation (affine sprites cannot be hidden)
-        entry->isHidden = true; // hide the sprite
+        // disable rotation and hide the sprite (affine sprites cannot be hidden)
+        entry->isRotateScale = false;
+        entry->isHidden = true;
     } else {
         if (affine) {
-            entry->isRotateScale = true; // re-enable rotation (this also unhides the sprite)
-            entry->isSizeDouble = doubleBound; // set double bound if specified
+            // re-enable rotation (this also unhides the sprite)
+            entry->isRotateScale = true;
+            // set double bound if specified
+            entry->isSizeDouble = doubleBound;
         } else {
-            entry->isHidden = false; // unhide the sprite
+            // unhide the sprite
+            entry->isHidden = false;
         }
     }
 }
@@ -51,6 +57,6 @@ void rotateSprite(SpriteRotation* rot, int angle)
 {
     s16 s = sinLerp(angle) >> 4;
     s16 c = cosLerp(angle) >> 4;
-    rot->hdx =  c; rot->hdy =  s;
-    rot->vdx = -s; rot->vdy =  c;
+    rot->hdx =  c; rot->vdx = -s; // [ cos() -sin() ]
+    rot->hdy =  s; rot->vdy =  c; // [ sin()  cos() ]
 }
