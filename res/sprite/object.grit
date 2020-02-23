@@ -1,0 +1,9 @@
+# Set log level to 3
+-W3
+
+# Use a palette and tile the sprite
+-p
+-gt
+
+# Set the bit depth to 4
+-gB4
