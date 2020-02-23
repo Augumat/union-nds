@@ -25,7 +25,7 @@ GRAPHICS	:=	res/sprite
 # display options for output files
 #---------------------------------------------------------------------------------
 GAME_TITLE	:=	Union-nds Demo
-GAME_ICON	:=	$(CURDIR)/../icon.bmp
+GAME_ICON	:=	$(CURDIR)/../res/icon.bmp
 
 #---------------------------------------------------------------------------------
 # options for code generation
