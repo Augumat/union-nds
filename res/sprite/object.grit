@@ -1,9 +1,9 @@
 # Set log level to 3
 -W3
 
-# Use a palette and tile the sprite
--p
+# Tile the image and include a palette
 -gt
+-p
 
-# Set the bit depth to 4
+# Set bit depth to 4
 -gB4

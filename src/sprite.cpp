@@ -1,6 +1,6 @@
 #include <nds.h>
 #include <nds/arm9/trig_lut.h>
-#include "includes/sprite.h"
+#include "sprite.h"
 
 void initOAM(OAMTable* oam)
 {
@@ -10,14 +10,14 @@ void initOAM(OAMTable* oam)
         oam->oamBuffer[i].attribute[1] = 0;
         oam->oamBuffer[i].attribute[2] = 0;
     }
-    // set transformation matrix to the identity matrix
+    // set each transformation matrix to the identity matrix
     for (int i = 0; i < MATRIX_COUNT; i++) {
         oam->matrixBuffer[i].hdx = 1 << 8;
         oam->matrixBuffer[i].hdy = 0;
         oam->matrixBuffer[i].vdx = 0;
         oam->matrixBuffer[i].vdy = 1 << 8;
     }
-    // update the initialized sprite
+    // update the initialized sprites
     updateOAM(oam);
 }
 

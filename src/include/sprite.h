@@ -7,6 +7,7 @@ struct SpriteInfo {
     int oamId;
     int width;
     int height;
+    int angle;
     SpriteEntry* entry;
 };
 
