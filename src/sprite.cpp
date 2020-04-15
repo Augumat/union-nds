@@ -1,6 +1,6 @@
 #include <nds.h>
 #include <nds/arm9/trig_lut.h>
-#include "sprite.h"
+#include "sprite.hpp"
 
 void initOAM(OAMTable* oam)
 {
@@ -57,6 +57,6 @@ void rotateSprite(SpriteRotation* rot, int angle)
 {
     s16 s = sinLerp(angle) >> 4;
     s16 c = cosLerp(angle) >> 4;
-    rot->hdx =  c; rot->vdx = -s; // [ cos() -sin() ]
-    rot->hdy =  s; rot->vdy =  c; // [ sin()  cos() ]
+    rot->hdx =  c; rot->vdx = -s; // [ cos(a) -sin(a) ]
+    rot->hdy =  s; rot->vdy =  c; // [ sin(a)  cos(a) ]
 }
